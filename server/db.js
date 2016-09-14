@@ -1,6 +1,6 @@
 var pg = require('pg');
 const config = require('../knexfile');
-const env = 'staging';
+const env = 'production';
 const knex = require('knex')({
   client: 'pg',
   connection: {
