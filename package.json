@@ -6,13 +6,20 @@
   "author": "",
   "license": "ISC",
   "scripts": {
+<<<<<<< HEAD
+=======
+    "postinstall": "bower install",
+>>>>>>> 9aa8758b947d46b44103ea71de72dac39996a5d0
     "start": "./node_modules/.bin/nodemon --ignore node_modules ./server/Server.js"
   },
   "devDependencies": {
     "browser-sync": "^1.5.7"
   },
   "dependencies": {
+<<<<<<< HEAD
     "angular": "^1.5.8",
+=======
+>>>>>>> 9aa8758b947d46b44103ea71de72dac39996a5d0
     "authport": "^1.0.0",
     "authport-makerpass": "^1.0.0",
     "bcrypt-nodejs": "0.0.3",
@@ -21,8 +28,16 @@
     "express": "^4.4.5",
     "express-session": "^1.14.1",
     "jwt-simple": "^0.2.0",
+<<<<<<< HEAD
     "node-makerpass": "^1.1.0",
     "path": "^0.12.7",
     "request": "^2.36.0"
+=======
+    "knex": "^0.12.0",
+    "node-makerpass": "^1.1.0",
+    "path": "^0.12.7",
+    "request": "^2.36.0",
+    "sqlite3": "^3.1.4"
+>>>>>>> 9aa8758b947d46b44103ea71de72dac39996a5d0
   }
 }
