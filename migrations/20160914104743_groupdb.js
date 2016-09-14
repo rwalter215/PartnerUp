@@ -20,12 +20,13 @@ exports.up = (knex, Promise) => Promise.all([
     table.increments('id');
     table.integer('user1_id');
     table.integer('user2_id');
-  }),
+  })
 ]);
+
 exports.down = (knex, Promise) => Promise.all([
   knex.schema.dropTableIfExists('users'),
   knex.schema.dropTableIfExists('groups'),
   knex.schema.dropTableIfExists('user_group'),
   knex.schema.dropTableIfExists('pairs'),
-  knex.schema.dropTableIfExists('roles'),
+  knex.schema.dropTableIfExists('roles')
 ]);
