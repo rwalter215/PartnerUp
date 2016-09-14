@@ -11,13 +11,9 @@ module.exports = {
       password: 'Mkih7oW9Ek6dGdTSmyuVgxw3kr',
       url: url
     },
-    // pool: {
-    //   min: 2,
-    //   max: 10
-    // },
-    // migrations: {
-    //   tableName: 'groupdb'
-    // }
+    migrations: {
+      tableName: 'migrations'
+    }
   }
 
 }
