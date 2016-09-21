@@ -7,22 +7,28 @@
   "license": "ISC",
   "scripts": {
     "postinstall": "bower install",
-    "start": "./node_modules/.bin/nodemon --ignore node_modules ./server/Server.js"
+    "start": "./node_modules/.bin/nodemon --ignore node_modules server/Server.js",
+    "test": "karma start spec/client/karma-conf.js"
   },
   "devDependencies": {
-    "browser-sync": "^1.5.7"
+    "browser-sync": "^1.5.7",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-nyan-reporter": "^0.2.4",
+    "karma-spec-reporter": "0.0.26"
   },
   "dependencies": {
     "authport": "^1.0.0",
     "authport-makerpass": "^1.0.0",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.4.3",
+    "body-parser": "^1.15.2",
     "bower": "^1.7.9",
     "express": "^4.4.5",
     "express-session": "^1.14.1",
     "jwt-simple": "^0.2.0",
     "knex": "^0.12.0",
-    "node-makerpass": "^1.1.0",
+    "node-makerpass": "^1.2.0",
+    "nodemon": "^1.10.2",
     "path": "^0.12.7",
     "pg": "^6.1.0",
     "request": "^2.36.0",

@@ -1,3 +1,102 @@
-<div>
-  
+<div ng-class="{toBackground: creatingGroup}" ng-show="initialized" class='main'>
+  <button class="signout" ng-click="signOut()">Log out</button>
+  <h1 class="welcome">Welcome, {{currentUser.name.includes("Gilbert") ? "Gilby" : currentUser.name || "Gilby"}}!</h1>
+
+  <!--Control buttons-->
+  <div class="controls">
+    <div class="createButtons">
+      <button ng-click="openCreateModal()" class='createClass'>Create a class</button>
+    </div>
+    <div class='currClass'>Current class: {{currentClass.name}}</div>
+    <select ng-model="currentClass" ng-options="class as class.name for class in classes" ng-change="changeClass()">
+    <option value="">Choose a class</option>
+    </select>
+    <br><br>
+    <div class='groupSize'>Group Size: </div>
+    <select ng-init="groupSizeSelect = 2" ng-model="groupSizeSelect">
+      <option ng-repeat="idx in getIndexArray(8)">{{idx+2}}</option>
+    </select>
+    <br>
+    <button ng-click="randomize(groupSizeSelect)" class="partnerBtn">Partner Up!</button>
+    <button ng-click="seeHistory()" class="histBtn">See History</button>
+  </div>
+
+  <!--Lists of people in the current class-->
+  <div class="instructorList">
+    <h2>Instructors: </h2>
+      <div class="instructor" ng-repeat="instructor in instructors">{{instructor.name}}</div>
+  </div>
+  <div class="fellowList">
+    <h2>Fellows: </h2>
+      <div class="fellow" ng-repeat="fellow in fellows">{{fellow.name}}</div>
+  </div>
+  <div class="studentList">
+    <h2>Students: </h2> 
+    <div class="student" ng-repeat="student in students"><button ng-click="removeFromStudent(student);">x</button>{{student.name}}</div>
+  </div>
+  <div>
+    <h2>Removed Students:</h2>
+    <div class ="removedStudents" ng-repeat="nopair in noPair"><button ng-click="addStudentBackIn(nopair);">o</button>{{nopair.name}}
+    </div>
+  </div>
+
+  <!--The table of current groupings-->
+  <div ng-show="partnerUp" class="studentGroups">
+    
+    <input ng-model="genTitle" placeholder="Title...">
+    <button  class='final' ng-click="finalize()" ng-show="partnerUp && !finalized">Finalize this pairing</button>
+    <table id="partners">
+    
+      <tr>
+      <th ng-repeat="index in getIndexArray(groupSizeSelect)">Partner {{index + 1}}</th>
+      </tr>
+      <tr  ng-repeat="group in groups" ng-class="{clash: !finalized && clashes.includes(group), locked: searchLockedGroups(group)}" >
+        <td  ng-repeat="stu in group" ng-click="selectForSwap(stu)" ng-class="{selectedStu: selectedForSwap === stu}" class="stu"> <img src='{{stu.avatar_pic}}' width='40px' height='50px'>
+          {{stu.name}}
+        </td>
+          <td>
+          <img src= "http://simpleicon.com/wp-content/uploads/lock-3.png" width='15px' height='15px' ng-show='!searchLockedGroups(group)' class="lockBtn" ng-click="toggleLockGroup(group)">
+          <img src= "http://image.flaticon.com/icons/svg/26/26053.svg" width='15px' height='15px' ng-show='searchLockedGroups(group)' class="lockBtn" ng-click="toggleLockGroup(group)">
+        </td>
+      </tr>
+    </table>
+    
+    <button class="clipyclip" data-clipboard-target="#partners">copy me</button>
+  </div>
 </div>
+
+
+  <!--The modal for creating a group-->
+  <div class="modal" ng-show="creatingGroup">
+    <form>
+      <label>Group Name: </label>
+      <br>
+      <input type="text" class="groupName" placeholder="(e.g. Physics 101, MKS46)" ng-model="groupName">
+      <form class="addUsers">
+        <br>
+        <label>Name:</label>
+        <br>
+        <input type="text" class="userName" ng-model="inputName">
+        <select class="roles" ng-model="inputRole" ng-options="role for role in roles">
+        <input type="submit" value="Add User" class="submitUser" ng-click="addToUserList(inputName, inputRole)">
+      </form>
+      <table class="addedUsers">
+        <tr>
+          <th>Name:</th>
+          <th>Role:</th>
+        </tr>
+        <tr ng-repeat="user in modalUserList">
+          <td>{{user.name}}</td>
+          <td>{{user.role}}</td>
+        </tr>
+      </table>
+      <input type="submit" value="Create Group" class="submitGroup" ng-click="createClass(groupName, modalUserList)">
+      <input type="submit" value="Cancel" class="cancel" ng-click="closeCreateModal()">
+    </form>
+  </div>
+
+<div class="initialLoad" ng-show="!initialized">
+  Loading...
+  <br>
+  <img src="https://i.imgur.com/TGGiq9Z.gif">
+</div> 

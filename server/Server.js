@@ -18,9 +18,10 @@ AuthPort.createServer({
 })
  
 AuthPort.on('auth', function(req, res, data) {
-  console.log("OAuth success!", data);
-  req.session.accessToken = data.token
-  req.session.uid = data.data.user.uid
+  console.log("OAuth success! user logged:", data.user);
+  req.session.accessToken = data.token;
+  req.session.uid = data.data.user.uid;
+  req.session.user = data.data.user;
   res.redirect('/')
 })
  
@@ -28,17 +29,16 @@ AuthPort.on('error', function(req, res, data) {
   console.log("OAuth failed.", data)
   res.status(500).send({ error: 'oauth_failed' })
 })
- 
- 
-// 
-// Adding to your express app 
-// 
+
 var express = require('express')
 var session = require('express-session')
 var app = express()
 var MP = require('node-makerpass');
 var path = require('path');
+var db = require('./db');
+var bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
 
 app.use(session({secret: "funnyGilby"}));
 app.use(express.static(path.join(__dirname, '../client'))); 
@@ -46,30 +46,103 @@ app.use(express.static(path.join(__dirname, '../client/app')));
 app.use(express.static(path.join(__dirname, '../bower_components')));
 app.get("/auth/:service", AuthPort.app);
 
-app.get("/myGroups", function(req, res){
-  MP.user.groups(req.session.uid, req.session.accessToken)
-  .then(function(data){
-    console.log("Makerpass groups data: ", data);
-    res.send(data);
+app.get("/signout", function(req, res){
+  req.session.destroy();
+  res.redirect("/")
+})
+
+app.get("/currentUser", function(req, res){
+  res.send(req.session.user);
+})
+
+app.get('/myGroups', (req, res) =>{
+  db.getGroupsForStudent(req.session.uid).then((groups) =>{
+    var mergeGroup = [];
+    for(let i=0; i<groups.length; i++) mergeGroup.push(groups[i][0])
+    res.send(mergeGroup)
   })
 })
 
-app.get("/groups/:nameId", function(req, res){
-  MP.group(req.params.nameId, req.session.accessToken)
-  .then(function(data){
-    console.log("Data for this group: ", data);
-    res.send(data);
+app.get('/updateGroups', (req, res) => {
+    var promiseArray = []
+    MP.user.groups(req.session.uid, req.session.accessToken)
+    .then(function(data){
+      for(let i=0; i<data.length; i++){
+      promiseArray.push(
+        db.addGroup({name: data[i].name, groupId:data[i].uid}).then((e) => {
+         return MP.memberships(data[i].name_id, req.session.accessToken)
+          .then((members) => db.addStudents(members))
+          .catch((err) => {console.log("error: ",err); res.status(500).send(err)})
+        }).catch((err) => {console.log("error: ",err); res.status(500).send(err)}))
+      }
+      Promise.all(promiseArray).then((e)=>{
+        res.send("true")
+      })
+      .catch((err) => {console.log("error at promise.all: ",err); res.status(500).send(err)})
+  }).catch((err) => {console.log("error: ",err); res.status(500).send(err)})
+})
+
+app.get('/:groupName/generations', (req,res) => {
+  db.getGroup({name: req.params.groupName})
+  .then((data) => 
+    db.getGenarationsByGroup(data[0].id)
+    .then((genarations) => {
+        res.send(genarations);
+    }).catch((err) => res.status(500).send(err))
+  ).catch((err) => res.status(500).send(err));
+})
+
+app.get('/:groupName/members', (req,res) => {
+  db.getGroup({name: req.params.groupName})
+  .then((data) => {
+    db.getStudentsByGroup(data[0].mks_id)
+    .then((data) => {
+      db.getStudentData(data).then((students) => {
+      res.send(students);
+      }).catch((err) => res.status(500).send(err))
+    })
+    .catch((err) => res.status(500).send(err))
+  })
+  .catch((err) => res.status(500).send(err));
+})
+
+app.get('/:groupName/pairs', (req,res) => {
+  db.getGroup({name: req.params.groupName})
+  .then(data => {
+    db.getPairsForGroup(data[0].id, req.params.groupName)
+    .then((pairs) => {
+      res.send(pairs)
+    })
   })
 })
 
-app.get("/groups/:nameId/memberships", function(req, res){
-  MP.memberships(req.params.nameId, req.session.accessToken)
-  .then(function(data){
-    console.log("Data for members: ", data);
-    res.send(data);
-  })
+app.post('/:groupName/pairs', (req, res) => {
+  res.send(db.addPairs(req.body, req.params.groupName))
 })
 
- 
-app.listen(4000)
-console.log('listening on port 4000 ')
+// app.get('/database/getUsersPartOfSameGroup', (req, res) => {
+//   db.findOrCreateAdmin({uid: req.session.uid, name: req.session.name}).then((id) => {
+//     console.log("id", id)
+//       db.getStudentsByGroup(id.uid).then((groups) => {
+//         res.send(groups) // send back an array with students that have groups that you can control over
+//       }).catch((err) => res.status(500).send(err)) // error probably db is down or something elsrong
+//   }).catch((err) => {
+//    console.log("error: ", err);
+//    res.status(401).send("error", err)
+//   })
+// })
+
+app.get('/test', (req, res) => {
+  db.getTables()
+    .then((data) => {
+      res.status(200).send(data)
+    })
+     .catch((err) => {
+      console.log('errror: ', err)
+      res.status(404).send()
+    })
+})
+
+var port = process.env.PORT || 4000
+app.listen(port)
+console.log('listening on port ' + port)

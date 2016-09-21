@@ -3,4 +3,189 @@ body {
   margin-top: 10px;
 }
 
+.signout{
+  margin-bottom: 20px
+}
 
+.studentGroups{
+  display: inline;
+  position: absolute;
+  top: 200px;
+  left: 350px;
+  float: left;
+  margin-right: 200px;
+}
+
+.modal{
+  position: absolute;
+  width: 300px;
+  border: 1px solid black;
+  top: 100px;
+  left: 500px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+}
+
+.addedUsers{
+  margin-top: 10px;
+  border: 1px solid #CCC;
+}
+
+.locked{
+  background-color: #DDD;
+}
+
+.lockBtn{
+  cursor: pointer;
+  color: #777;
+}
+
+.clash{
+  color: red;
+}
+.bad{
+  color: red;
+}
+th{
+  padding-right: 30px;
+}
+
+td{
+  padding-right: 30px;
+}
+
+.toBackground{
+  position: relative;
+  background-color: #CCC;
+}
+
+.stu{
+  cursor: pointer;
+  border-style: solid;
+  border-width: 3px;
+ 
+  background-color: #ebebeb;
+  
+  border-color: #dbdbdb;
+
+}
+.selectedStu{
+  color: #CCC;
+}
+.loginBtn{
+  background-color: cornflowerblue;
+  color:white;
+  border-radius: 5px;
+  float: right;
+  height:35px;
+  width: 150px;
+  font-size:13px;
+}
+.welcome{
+  text-align: center;
+
+}
+.info{
+  padding:30px;
+  background-color: #ebebeb;
+  border: solid;
+  border-color: #dbdbdb;
+}
+.login{
+  font-family: 'Josefin Sans', sans-serif;
+
+}
+.main{
+  font-family: 'Josefin Sans', sans-serif;
+  margin:20px;
+}
+.signout{
+  float: right;
+  background-color: cornflowerblue;
+  color:white;
+  border-radius: 5px;
+  height:30px;
+  width: 125px;
+  font-size:13px;
+}
+.partnerBtn{
+  background-color: cornflowerblue;
+  color:white;
+  border-radius: 5px;
+  margin-top: 10px;
+  height:30px;
+  width: 125px;
+  font-size:13px;
+}
+.createClass{
+  background-color: cornflowerblue;
+  color:white;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom:10px;
+  height:30px;
+  width: 125px;
+  font-size:13px;
+}
+.histBtn{
+    background-color: cornflowerblue;
+  color:white;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom:10px;
+  height:30px;
+  width: 125px;
+  font-size:13px;
+}
+.currClass{
+  font-size:20px;
+}
+.groupSize{
+  font-size:20px;
+}
+.clipyclip{
+  background-color: cornflowerblue;
+  color:white;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom:10px;
+  height:30px;
+  width: 125px;
+  font-size:13px;
+}
+.final{
+  background-color: cornflowerblue;
+  color:white;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom:10px;
+  height:30px;
+  width: 125px;
+  font-size:12px;
+}
+.history{
+  margin-left:20px;
+  font-family: 'Josefin Sans', sans-serif;
+}
+.changers{
+    background-color: cornflowerblue;
+  color:white;
+  border-radius: 5px;
+  margin-top: 10px
+  margin-bottom:10px;
+  height:30px;
+  width: 125px;
+  font-size:12px;
+}
+.goHome{
+  background-color: cornflowerblue;
+  color:white;
+  border-radius: 5px;
+  float: right;
+  margin-bottom:10px;
+  height:30px;
+  width: 125px;
+  font-size:12px;
+}
