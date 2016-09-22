@@ -58,9 +58,11 @@ app.get("/currentUser", function(req, res){
 app.get("/myGroups", function(req, res){    
   MP.user.groups(req.session.uid, req.session.accessToken)    
   .then(function(data){ 
-
-    console.log("Makerpass groups data: ", data);   
-    res.send(data);   
+    db.addGroups(data)
+      .then((groups) => {
+        console.log("Makerpass groups data: ", groups);   
+        res.send(groups);   
+      })
   })    
 })
 
@@ -86,8 +88,7 @@ app.get("/:groupName/members", function(req, res){
     db.getGroup({name: req.params.groupName})
     .then((group) => {
       MP.memberships(group.mks_id, req.session.accessToken)    
-      .then(function(students){   
-        console.log("Data for members: ", students);    
+      .then(function(students){      
         res.send(students);   
       }).catch((err) => res.status(500).send(err))
     }).catch((err) => res.status(500).send(err))
