@@ -9,7 +9,7 @@ exports.up = (knex, Promise) => Promise.all([
     table.string('user1_uid');
     table.string('user2_uid');
     table.integer('group_id');
-    table.integer('gen_id');
+    table.integer('gen_table_id');
   }),
   knex.schema.createTableIfNotExists('generations', table => {
     table.increments('id');
